@@ -63,6 +63,8 @@ document.addEventListener("click", (ele) => {
         lettersContainer.classList.add("finished");
         endGame();
       }
+    } else {
+      document.querySelector("#success").play();
     }
   }
 });
