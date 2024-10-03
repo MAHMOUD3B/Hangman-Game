@@ -1,6 +1,6 @@
 const letters = "abcdefghijklmnopqrstuvwxyz.";
 let lettersArray = Array.from(letters);
-let lettersContainer = document.querySelector(".letters");
+const lettersContainer = document.querySelector(".letters");
 lettersArray.forEach((ele) => {
   let span = document.createElement("span");
   span.className = "letter-box";
@@ -27,7 +27,7 @@ let keys = Object.keys(words);
 let randomPropNumber = Math.floor(Math.random() * keys.length);
 let randomPropName = keys[randomPropNumber];
 let randomPropValue = words[randomPropName];
-let randomValueNumber = Math.floor(Math.random() * randomPropName.length);
+let randomValueNumber = Math.floor(Math.random() * randomPropValue.length);
 let randomValue = randomPropValue[randomValueNumber];
 document.querySelector(".game-info .catogery span").innerHTML = randomPropName;
 let lettersGeuss = document.querySelector(".letters-guess");
@@ -40,6 +40,9 @@ wordLetters.forEach(() => {
 let guessSpans = document.querySelectorAll(".letters-guess span");
 let theDraw = document.querySelector(".hangman-draw");
 let wrongCounter = 0;
+let wordSize = [];
+wordSize.length = wordLetters.length;
+
 document.addEventListener("click", (ele) => {
   let theStatus = false;
   if (ele.target.className === "letter-box") {
@@ -51,6 +54,7 @@ document.addEventListener("click", (ele) => {
         guessSpans.forEach((span, spanIndex) => {
           if (letterIndex === spanIndex) {
             span.innerHTML = clickedLetter;
+            wordSize[spanIndex] = clickedLetter;
           }
         });
       }
@@ -61,19 +65,24 @@ document.addEventListener("click", (ele) => {
       document.querySelector("#fail").play();
       if (wrongCounter === 8) {
         lettersContainer.classList.add("finished");
-        endGame();
+        let loseMsg = `Game Over The Word Is: ${randomValue}`;
+        endGame(loseMsg);
       }
     } else {
       document.querySelector("#success").play();
     }
   }
+  if (wordSize.join("").toString() === wordLetters.join("").toString()) {
+    let winMsg = `Congrates You Win The Word Is: ${randomValue}`;
+    
+    endGame(winMsg);
+  }
 });
-function endGame() {
+
+function endGame(msg) {
   let div = document.createElement("div");
   div.className = "game-over";
-  let divText = document.createTextNode(
-    `Game Over The Word Is: ${randomValue}`
-  );
+  let divText = document.createTextNode(msg);
   div.appendChild(divText);
   document.body.appendChild(div);
   let tryAgain = document.createElement("span");
